@@ -37,44 +37,73 @@ export const ProgressGraphs = () => {
       const startDate = new Date();
       startDate.setDate(endDate.getDate() - 7);
 
-      const { data: habits } = await supabase
+      console.log('Buscando dados semanais:', {
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+      });
+
+      const { data: habits, error: habitsError } = await supabase
         .from('habits')
         .select('id')
         .eq('user_id', user?.id);
 
-      const { data: checks, error } = await supabase
+      if (habitsError) {
+        console.error('Erro ao buscar hábitos:', habitsError);
+        throw habitsError;
+      }
+
+      console.log('Hábitos encontrados:', habits?.length);
+
+      const { data: checks, error: checksError } = await supabase
         .from('habit_checks')
         .select('*')
         .eq('user_id', user?.id)
         .gte('date', startDate.toISOString().split('T')[0])
         .lte('date', endDate.toISOString().split('T')[0]);
 
-      if (error) throw error;
+      if (checksError) {
+        console.error('Erro ao buscar checks:', checksError);
+        throw checksError;
+      }
+
+      console.log('Checks encontrados:', checks?.length);
 
       const totalHabits = habits?.length || 0;
 
-      // Processar dados para formato do gráfico
-      const processedData = (checks || []).reduce((acc: { [key: string]: HabitCompletion }, log: HabitLog) => {
-        const date = new Date(log.date).toLocaleDateString('pt-BR', { weekday: 'short' });
-        if (!acc[date]) {
-          acc[date] = { date, completed: 0, total: totalHabits };
-        }
-        if (log.value > 0) {
-          acc[date].completed += 1;
-        }
-        return acc;
-      }, {});
-
-      // Preencher dias sem dados
+      // Criar um mapa de datas para facilitar o processamento
+      const dateMap = new Map<string, { completed: number; total: number }>();
       const weekDays = ['dom.', 'seg.', 'ter.', 'qua.', 'qui.', 'sex.', 'sáb.'];
+
+      // Inicializar todos os dias da semana
+      for (let i = 0; i < 7; i++) {
+        const date = new Date(startDate);
+        date.setDate(startDate.getDate() + i);
+        const weekDay = date.toLocaleDateString('pt-BR', { weekday: 'short' });
+        dateMap.set(weekDay, { completed: 0, total: totalHabits });
+      }
+
+      // Processar os checks
+      checks?.forEach((check: HabitLog) => {
+        const date = new Date(check.date);
+        const weekDay = date.toLocaleDateString('pt-BR', { weekday: 'short' });
+        const dayData = dateMap.get(weekDay);
+        if (dayData && check.value > 0) {
+          dayData.completed += 1;
+        }
+      });
+
+      // Converter o mapa em array
       const result = weekDays.map(day => ({
         date: day,
-        completed: processedData[day]?.completed || 0,
+        completed: dateMap.get(day)?.completed || 0,
         total: totalHabits,
       }));
 
+      console.log('Dados processados:', result);
+
       return result;
     },
+    enabled: !!user,
   });
 
   const { data: monthlyData } = useQuery({
@@ -84,36 +113,68 @@ export const ProgressGraphs = () => {
       const startDate = new Date();
       startDate.setDate(endDate.getDate() - 30);
 
-      const { data: habits } = await supabase
+      console.log('Buscando dados mensais:', {
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+      });
+
+      const { data: habits, error: habitsError } = await supabase
         .from('habits')
         .select('id')
         .eq('user_id', user?.id);
 
-      const { data: checks, error } = await supabase
+      if (habitsError) {
+        console.error('Erro ao buscar hábitos:', habitsError);
+        throw habitsError;
+      }
+
+      const { data: checks, error: checksError } = await supabase
         .from('habit_checks')
         .select('*')
         .eq('user_id', user?.id)
         .gte('date', startDate.toISOString().split('T')[0])
         .lte('date', endDate.toISOString().split('T')[0]);
 
-      if (error) throw error;
+      if (checksError) {
+        console.error('Erro ao buscar checks:', checksError);
+        throw checksError;
+      }
 
       const totalHabits = habits?.length || 0;
 
-      // Processar dados para formato do gráfico
-      const processedData = (checks || []).reduce((acc: { [key: string]: HabitCompletion }, log: HabitLog) => {
-        const date = new Date(log.date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-        if (!acc[date]) {
-          acc[date] = { date, completed: 0, total: totalHabits };
-        }
-        if (log.value > 0) {
-          acc[date].completed += 1;
-        }
-        return acc;
-      }, {});
+      // Criar um mapa de datas para facilitar o processamento
+      const dateMap = new Map<string, { completed: number; total: number }>();
 
-      return Object.values(processedData);
+      // Inicializar todas as datas do período
+      for (let i = 0; i < 30; i++) {
+        const date = new Date(startDate);
+        date.setDate(startDate.getDate() + i);
+        const dateStr = date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+        dateMap.set(dateStr, { completed: 0, total: totalHabits });
+      }
+
+      // Processar os checks
+      checks?.forEach((check: HabitLog) => {
+        const date = new Date(check.date);
+        const dateStr = date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+        const dayData = dateMap.get(dateStr);
+        if (dayData && check.value > 0) {
+          dayData.completed += 1;
+        }
+      });
+
+      // Converter o mapa em array
+      const result = Array.from(dateMap.entries()).map(([date, data]) => ({
+        date,
+        completed: data.completed,
+        total: data.total,
+      }));
+
+      console.log('Dados mensais processados:', result);
+
+      return result;
     },
+    enabled: !!user,
   });
 
   return (
