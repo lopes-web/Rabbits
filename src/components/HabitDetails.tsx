@@ -80,17 +80,24 @@ export function HabitDetails({ habit, checks }: HabitDetailsProps) {
               {(() => {
                 let streak = 0;
                 const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                // Ordena os checks por data, do mais recente para o mais antigo
                 const sortedChecks = [...checks].sort(
                   (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
                 );
 
-                for (const check of sortedChecks) {
+                // Filtra apenas os checks da semana atual
+                const weekChecks = sortedChecks.filter(check => {
                   const checkDate = new Date(check.date);
-                  const diff = Math.floor(
-                    (today.getTime() - checkDate.getTime()) / (1000 * 60 * 60 * 24)
-                  );
+                  const diffTime = today.getTime() - checkDate.getTime();
+                  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                  return diffDays <= 6; // Últimos 7 dias
+                });
 
-                  if (diff === streak && check.value > 0) {
+                // Conta os dias consecutivos com checks
+                for (const check of weekChecks) {
+                  if (check.value > 0) {
                     streak++;
                   } else {
                     break;
