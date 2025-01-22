@@ -14,6 +14,7 @@
 - ✅ Personalização de cores
 - ✅ Definição de metas para contadores
 - ✅ Exclusão de hábitos
+- ✅ Sistema de recorrência (diário, semanal, mensal)
 
 ### Tracking
 - ✅ Marcação de hábitos diários
@@ -23,14 +24,19 @@
 - ✅ Contagem total de dias
 - ✅ Sequência atual
 - ✅ Maior sequência
+- ✅ Gráficos de progresso semanal e mensal
+- ✅ Estatísticas detalhadas
 
 ### UI/UX
 - ✅ Design responsivo
-- ✅ Tema escuro
+- ✅ Tema escuro/claro
 - ✅ Animações de confete ao completar hábitos
 - ✅ Feedback visual com toasts
 - ✅ Scrollbar customizada
 - ✅ Layout intuitivo
+- ✅ Tradução para português
+- ✅ Melhor contraste e visibilidade
+- ✅ Navegação intuitiva com botão de voltar
 
 ### Backend
 - ✅ Integração com Supabase
@@ -38,6 +44,7 @@
 - ✅ Cache com React Query
 - ✅ Políticas de segurança (RLS)
 - ✅ Índices otimizados
+- ✅ Ajuste de fuso horário (UTC-3)
 
 ## 📋 Melhorias Planejadas
 
@@ -54,10 +61,8 @@
 - ⏳ Categorias de hábitos
 
 ### Visualização de Dados
-- ⏳ Gráficos de progresso
-- ⏳ Estatísticas detalhadas
-- ⏳ Sistema de conquistas
 - ⏳ Análise de tendências
+- ⏳ Sistema de conquistas
 
 ### Interatividade
 - ⏳ Tooltips informativos
@@ -72,7 +77,6 @@
 - ⏳ Recompensas
 
 ### Acessibilidade
-- ⏳ Melhor contraste
 - ⏳ Descrições ARIA
 - ⏳ Navegação por teclado
 - ⏳ Testes de acessibilidade
@@ -97,11 +101,13 @@
 
 ## 🔄 Atualizações Recentes
 
-### v1.0.0 (Atual)
-- Implementação inicial do tracking de hábitos
-- Sistema de autenticação
-- Interface básica
-- Sincronização com backend
+### v1.1.0 (Atual)
+- Sistema de recorrência de hábitos
+- Tema claro/escuro
+- Gráficos de progresso
+- Interface em português
+- Ajustes de timezone
+- Melhorias visuais
 
 ### Próximas Atualizações
 1. Melhorias visuais e micro-interações
