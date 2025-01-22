@@ -33,6 +33,9 @@ const schema = z.object({
   type: z.enum(["daily", "counter"], {
     required_error: "Tipo é obrigatório",
   }),
+  recurrence: z.enum(["daily", "weekly", "monthly"], {
+    required_error: "Recorrência é obrigatória",
+  }),
   target: z.number().min(1, "Meta deve ser maior que 0").optional(),
 });
 
@@ -59,7 +62,8 @@ export function AddHabitDialog({ open, onOpenChange }: AddHabitDialogProps) {
     resolver: zodResolver(schema),
     defaultValues: {
       color: PRESET_COLORS[0].value,
-      type: "daily", // Definindo um valor padrão para type
+      type: "daily",
+      recurrence: "daily",
     },
   });
 
@@ -85,6 +89,7 @@ export function AddHabitDialog({ open, onOpenChange }: AddHabitDialogProps) {
       name: data.name,
       color: data.color,
       type: data.type,
+      recurrence: data.recurrence,
       target: data.target,
       user_id: user.id,
     });
@@ -144,6 +149,30 @@ export function AddHabitDialog({ open, onOpenChange }: AddHabitDialogProps) {
             </RadioGroup>
             {errors.type && (
               <p className="text-sm text-destructive">{errors.type.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label>Recorrência</Label>
+            <RadioGroup
+              defaultValue="daily"
+              onValueChange={(value: "daily" | "weekly" | "monthly") => setValue("recurrence", value)}
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="daily" id="rec-daily" />
+                <Label htmlFor="rec-daily">Diária</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="weekly" id="rec-weekly" />
+                <Label htmlFor="rec-weekly">Semanal</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="monthly" id="rec-monthly" />
+                <Label htmlFor="rec-monthly">Mensal</Label>
+              </div>
+            </RadioGroup>
+            {errors.recurrence && (
+              <p className="text-sm text-destructive">{errors.recurrence.message}</p>
             )}
           </div>
 
