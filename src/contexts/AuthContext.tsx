@@ -19,27 +19,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Verifica se há uma sessão ativa
+    console.log('AuthProvider: iniciando...');
+    
+    // Verificar sessão atual
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('AuthProvider: sessão atual:', !!session);
       setUser(session?.user ?? null);
       setLoading(false);
     });
 
-    // Inscreve para mudanças na autenticação
+    // Escutar mudanças de autenticação
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log('AuthProvider: mudança de estado:', _event);
       setUser(session?.user ?? null);
       setLoading(false);
-      if (session?.user) {
-        navigate("/");
-      } else {
-        navigate("/login");
-      }
     });
 
-    return () => subscription.unsubscribe();
-  }, [navigate]);
+    return () => {
+      console.log('AuthProvider: limpando subscription');
+      subscription.unsubscribe();
+    };
+  }, []);
 
   const signIn = async (email: string) => {
     try {
@@ -61,10 +63,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     try {
+      console.log('AuthProvider: iniciando logout');
+      setLoading(true);
       await supabase.auth.signOut();
-      navigate("/login");
-    } catch (error: any) {
-      toast.error("Erro ao sair");
+      console.log('AuthProvider: logout concluído');
+    } catch (error) {
+      console.error('AuthProvider: erro no logout:', error);
+    } finally {
+      setLoading(false);
     }
   };
 

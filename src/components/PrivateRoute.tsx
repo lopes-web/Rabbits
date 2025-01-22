@@ -1,24 +1,30 @@
-import { Navigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface PrivateRouteProps {
   children: React.ReactNode;
 }
 
-export function PrivateRoute({ children }: PrivateRouteProps) {
+export const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const { user, loading } = useAuth();
+
+  useEffect(() => {
+    console.log('PrivateRoute:', { user: !!user, loading });
+  }, [user, loading]);
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+      <div className="flex h-screen items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
       </div>
     );
   }
 
   if (!user) {
-    return <Navigate to="/login" />;
+    console.log('PrivateRoute: redirecionando para /login');
+    return <Navigate to="/login" replace />;
   }
 
-  return children;
-} 
+  return <>{children}</>;
+}; 
