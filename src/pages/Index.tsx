@@ -262,7 +262,7 @@ const Index = () => {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="flex h-5 w-5 items-center justify-center rounded-full border border-muted hover:bg-muted/50 p-0 text-xs leading-none"
+                          className="flex h-5 w-5 items-center justify-center rounded-full border border-muted hover:bg-muted/50 p-0 text-xs leading-[0]"
                           onClick={(e) => {
                             e.preventDefault();
                             handleCounterDecrement(habit.id, date);
@@ -281,7 +281,7 @@ const Index = () => {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="flex h-5 w-5 items-center justify-center rounded-full border border-muted hover:bg-muted/50 p-0 text-xs leading-none"
+                          className="flex h-5 w-5 items-center justify-center rounded-full border border-muted hover:bg-muted/50 p-0 text-xs leading-[0]"
                           onClick={(e) => {
                             e.preventDefault();
                             handleCounterIncrement(habit.id, habit.color, date, habit.target);

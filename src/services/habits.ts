@@ -6,7 +6,7 @@ export interface Habit {
   name: string;
   color: string;
   type: "daily" | "counter";
-  recurrence?: string[];
+  recurrence: string;
   target?: number;
   created_at: string;
   updated_at: string;

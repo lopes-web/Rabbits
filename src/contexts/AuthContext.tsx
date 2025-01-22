@@ -43,28 +43,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = async (email: string) => {
     try {
-      // Tenta fazer login com senha (usando o email como senha)
-      const { error: signInError } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithOtp({
         email,
-        password: email, // Usando o email como senha por simplicidade
+        options: {
+          emailRedirectTo: window.location.origin,
+        },
       });
 
-      if (signInError) {
-        // Se o login falhar, tenta criar o usuário
-        const { error: signUpError } = await supabase.auth.signUp({
-          email,
-          password: email, // Usando o email como senha por simplicidade
-        });
-
-        if (signUpError) throw signUpError;
-        
-        toast.success("Link de acesso enviado para seu email!");
-      } else {
-        // Login bem sucedido
-        navigate("/");
-      }
+      if (error) throw error;
+      
+      toast.success("Link de acesso enviado para seu email!");
     } catch (error: any) {
-      throw error;
+      console.error("Erro ao enviar link de acesso:", error);
+      toast.error("Erro ao enviar link de acesso");
     }
   };
 
