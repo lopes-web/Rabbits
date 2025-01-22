@@ -28,9 +28,9 @@ const PRESET_COLORS = [
 ];
 
 const RECURRENCE_OPTIONS = [
-  { label: "Diária", value: "day" },
-  { label: "Semanal", value: "week" },
-  { label: "Mensal", value: "month" },
+  { label: "Diária", value: "daily" },
+  { label: "Semanal", value: "weekly" },
+  { label: "Mensal", value: "monthly" },
 ] as const;
 
 const schema = z.object({
@@ -39,7 +39,7 @@ const schema = z.object({
   type: z.enum(["daily", "counter"], {
     required_error: "Tipo é obrigatório",
   }),
-  recurrence: z.enum(["day", "week", "month"], {
+  recurrence: z.enum(["daily", "weekly", "monthly"], {
     required_error: "Recorrência é obrigatória",
   }),
   target: z.number().min(1, "Meta deve ser maior que 0").optional(),
@@ -69,7 +69,7 @@ export function AddHabitDialog({ open, onOpenChange }: AddHabitDialogProps) {
     defaultValues: {
       color: PRESET_COLORS[0].value,
       type: "daily",
-      recurrence: "day",
+      recurrence: "daily",
     },
   });
 
@@ -170,8 +170,8 @@ export function AddHabitDialog({ open, onOpenChange }: AddHabitDialogProps) {
           <div className="space-y-2">
             <Label>Recorrência</Label>
             <RadioGroup
-              defaultValue="day"
-              onValueChange={(value: "day" | "week" | "month") => setValue("recurrence", value)}
+              defaultValue="daily"
+              onValueChange={(value: "daily" | "weekly" | "monthly") => setValue("recurrence", value)}
             >
               {RECURRENCE_OPTIONS.map((option) => (
                 <div key={option.value} className="flex items-center space-x-2">
