@@ -111,7 +111,7 @@ const Index = () => {
       const date = new Date(today.getTime());
       date.setDate(diff + index);
       return {
-        name: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][index],
+        name: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"][index],
         date: formatDate(date),
       };
     });
