@@ -21,6 +21,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { format, startOfYear, endOfYear } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useNavigate } from "react-router-dom";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const Index = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -222,6 +223,7 @@ const Index = () => {
       <div className="flex justify-between items-center">
         <Logo />
         <div className="flex gap-2">
+          <ThemeToggle />
           <Button
             variant="outline"
             onClick={() => navigate('/analytics')}

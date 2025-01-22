@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const Analytics = () => {
   const { user } = useAuth();
@@ -45,6 +46,9 @@ export const Analytics = () => {
         <h1 className="text-3xl font-bold text-white">
           Análise de Progresso
         </h1>
+        <div className="ml-auto">
+          <ThemeToggle />
+        </div>
       </div>
 
       <div className="space-y-12">
