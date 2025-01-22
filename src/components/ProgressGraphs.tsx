@@ -30,7 +30,7 @@ interface HabitCompletion {
 export const ProgressGraphs = () => {
   const { user } = useAuth();
 
-  const { data: weeklyData } = useQuery({
+  const { data: weeklyData, isLoading: weeklyLoading, error: weeklyError } = useQuery({
     queryKey: ['weeklyProgress'],
     queryFn: async () => {
       const endDate = new Date();
@@ -104,9 +104,11 @@ export const ProgressGraphs = () => {
       return result;
     },
     enabled: !!user,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 30 * 60 * 1000, // 30 minutes
   });
 
-  const { data: monthlyData } = useQuery({
+  const { data: monthlyData, isLoading: monthlyLoading, error: monthlyError } = useQuery({
     queryKey: ['monthlyProgress'],
     queryFn: async () => {
       const endDate = new Date();
@@ -175,55 +177,81 @@ export const ProgressGraphs = () => {
       return result;
     },
     enabled: !!user,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 30 * 60 * 1000, // 30 minutes
   });
 
   return (
     <div className="space-y-8">
-      <div className="rounded-lg bg-white p-4 shadow-md dark:bg-gray-800">
-        <h2 className="mb-4 text-xl font-semibold text-gray-800 dark:text-white">
-          Progresso Semanal
-        </h2>
-        <div className="h-64">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={weeklyData || []}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis domain={[0, 'auto']} />
-              <Tooltip />
-              <Line
-                type="monotone"
-                dataKey="completed"
-                stroke="#8884d8"
-                name="Hábitos Completados"
-              />
-              <Line
-                type="monotone"
-                dataKey="total"
-                stroke="#82ca9d"
-                name="Total de Hábitos"
-              />
-            </LineChart>
-          </ResponsiveContainer>
+      {weeklyLoading || monthlyLoading ? (
+        <div className="flex h-64 items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
         </div>
-      </div>
+      ) : weeklyError || monthlyError ? (
+        <div className="rounded-lg bg-red-50 p-4 text-red-800 dark:bg-red-900/50 dark:text-red-200">
+          <p>Erro ao carregar dados dos gráficos.</p>
+        </div>
+      ) : (
+        <>
+          <div className="rounded-lg bg-white p-4 shadow-md dark:bg-gray-800">
+            <h2 className="mb-4 text-xl font-semibold text-gray-800 dark:text-white">
+              Progresso Semanal
+            </h2>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={weeklyData || []}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis domain={[0, 'auto']} />
+                  <Tooltip />
+                  <Line
+                    type="monotone"
+                    dataKey="completed"
+                    stroke="#8884d8"
+                    name="Hábitos Completados"
+                    strokeWidth={2}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="total"
+                    stroke="#82ca9d"
+                    name="Total de Hábitos"
+                    strokeWidth={2}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
 
-      <div className="rounded-lg bg-white p-4 shadow-md dark:bg-gray-800">
-        <h2 className="mb-4 text-xl font-semibold text-gray-800 dark:text-white">
-          Progresso Mensal
-        </h2>
-        <div className="h-64">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={monthlyData || []}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis domain={[0, 'auto']} />
-              <Tooltip />
-              <Bar dataKey="completed" fill="#8884d8" name="Hábitos Completados" />
-              <Bar dataKey="total" fill="#82ca9d" name="Total de Hábitos" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+          <div className="rounded-lg bg-white p-4 shadow-md dark:bg-gray-800">
+            <h2 className="mb-4 text-xl font-semibold text-gray-800 dark:text-white">
+              Progresso Mensal
+            </h2>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={monthlyData || []}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis domain={[0, 'auto']} />
+                  <Tooltip />
+                  <Bar 
+                    dataKey="completed" 
+                    fill="#8884d8" 
+                    name="Hábitos Completados"
+                    radius={[4, 4, 0, 0]}
+                  />
+                  <Bar 
+                    dataKey="total" 
+                    fill="#82ca9d" 
+                    name="Total de Hábitos"
+                    radius={[4, 4, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }; 
