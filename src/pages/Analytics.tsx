@@ -39,11 +39,11 @@ export const Analytics = () => {
           variant="ghost"
           size="icon"
           onClick={() => navigate('/')}
-          className="h-10 w-10 rounded-full hover:bg-gray-800"
+          className="h-10 w-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
-        <h1 className="text-3xl font-bold text-white">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
           Análise de Progresso
         </h1>
         <div className="ml-auto">
@@ -53,21 +53,21 @@ export const Analytics = () => {
 
       <div className="space-y-12">
         <section>
-          <h2 className="mb-6 text-2xl font-semibold text-gray-100">
+          <h2 className="mb-6 text-2xl font-semibold text-gray-800 dark:text-gray-100">
             Estatísticas
           </h2>
           <Statistics />
         </section>
 
         <section>
-          <h2 className="mb-6 text-2xl font-semibold text-gray-100">
+          <h2 className="mb-6 text-2xl font-semibold text-gray-800 dark:text-gray-100">
             Gráficos de Progresso
           </h2>
           <ProgressGraphs />
         </section>
 
         <section>
-          <h2 className="mb-6 text-2xl font-semibold text-gray-100">
+          <h2 className="mb-6 text-2xl font-semibold text-gray-800 dark:text-gray-100">
             Conquistas
           </h2>
           <Achievements />
