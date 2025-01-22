@@ -58,10 +58,10 @@ export const Achievements = () => {
     queryKey: ['achievements'],
     queryFn: async () => {
       const { data: logs, error } = await supabase
-        .from('habit_logs')
+        .from('habit_checks')
         .select('*')
         .eq('user_id', user?.id)
-        .eq('completed', true);
+        .gt('value', 0);
 
       if (error) throw error;
 

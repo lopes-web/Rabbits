@@ -31,7 +31,7 @@ export const ProgressGraphs = () => {
       startDate.setDate(endDate.getDate() - 7);
 
       const { data, error } = await supabase
-        .from('habit_logs')
+        .from('habit_checks')
         .select('*')
         .eq('user_id', user?.id)
         .gte('date', startDate.toISOString())
@@ -62,7 +62,7 @@ export const ProgressGraphs = () => {
       startDate.setDate(endDate.getDate() - 30);
 
       const { data, error } = await supabase
-        .from('habit_logs')
+        .from('habit_checks')
         .select('*')
         .eq('user_id', user?.id)
         .gte('date', startDate.toISOString())

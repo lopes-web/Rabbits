@@ -5,7 +5,8 @@ import { useAuth } from '../contexts/AuthContext';
 
 interface HabitLog {
   date: string;
-  completed: boolean;
+  value: number;
+  habit_id: string;
   user_id: string;
 }
 
@@ -28,7 +29,7 @@ export const Statistics = () => {
       startDate.setDate(endDate.getDate() - 30); // Últimos 30 dias
 
       const { data, error } = await supabase
-        .from('habit_logs')
+        .from('habit_checks')
         .select('*')
         .eq('user_id', user?.id)
         .gte('date', startDate.toISOString())
@@ -55,7 +56,7 @@ export const Statistics = () => {
         if (!acc[date]) {
           acc[date] = { completed: 0, total: 0 };
         }
-        acc[date].completed += log.completed ? 1 : 0;
+        acc[date].completed += log.value > 0 ? 1 : 0;
         acc[date].total += 1;
         return acc;
       }, {});
