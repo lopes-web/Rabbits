@@ -89,7 +89,7 @@ export function AddHabitDialog({ open, onOpenChange }: AddHabitDialogProps) {
       name: data.name,
       color: data.color,
       type: data.type,
-      recurrence: data.recurrence,
+      recurrence: [data.recurrence],
       target: data.target,
       user_id: user.id,
     });
