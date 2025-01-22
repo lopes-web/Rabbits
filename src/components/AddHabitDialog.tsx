@@ -77,7 +77,8 @@ export function AddHabitDialog({ open, onOpenChange }: AddHabitDialogProps) {
       reset();
       toast.success("Hábito criado com sucesso!");
     },
-    onError: () => {
+    onError: (error: any) => {
+      console.error("Erro ao criar hábito:", error);
       toast.error("Erro ao criar hábito");
     },
   });
@@ -85,14 +86,17 @@ export function AddHabitDialog({ open, onOpenChange }: AddHabitDialogProps) {
   const onSubmit = async (data: FormData) => {
     if (!user) return;
 
-    await mutation.mutateAsync({
+    const habitData = {
       name: data.name,
       color: data.color,
       type: data.type,
       recurrence: [data.recurrence],
-      target: data.target,
+      target: data.type === "counter" ? data.target : null,
       user_id: user.id,
-    });
+    };
+
+    console.log("Enviando dados:", habitData);
+    await mutation.mutateAsync(habitData);
   };
 
   return (
@@ -136,7 +140,12 @@ export function AddHabitDialog({ open, onOpenChange }: AddHabitDialogProps) {
             <Label>Tipo</Label>
             <RadioGroup
               value={habitType}
-              onValueChange={(value: "daily" | "counter") => setValue("type", value)}
+              onValueChange={(value: "daily" | "counter") => {
+                setValue("type", value);
+                if (value === "daily") {
+                  setValue("target", undefined);
+                }
+              }}
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="daily" id="daily" />
