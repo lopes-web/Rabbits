@@ -27,13 +27,19 @@ const PRESET_COLORS = [
   { name: "Laranja", value: "#f97316" },
 ];
 
+const RECURRENCE_OPTIONS = [
+  { label: "Diária", value: "day" },
+  { label: "Semanal", value: "week" },
+  { label: "Mensal", value: "month" },
+] as const;
+
 const schema = z.object({
   name: z.string().min(1, "Nome é obrigatório"),
   color: z.string().min(1, "Cor é obrigatória"),
   type: z.enum(["daily", "counter"], {
     required_error: "Tipo é obrigatório",
   }),
-  recurrence: z.enum(["daily", "weekly", "monthly"], {
+  recurrence: z.enum(["day", "week", "month"], {
     required_error: "Recorrência é obrigatória",
   }),
   target: z.number().min(1, "Meta deve ser maior que 0").optional(),
@@ -63,7 +69,7 @@ export function AddHabitDialog({ open, onOpenChange }: AddHabitDialogProps) {
     defaultValues: {
       color: PRESET_COLORS[0].value,
       type: "daily",
-      recurrence: "daily",
+      recurrence: "day",
     },
   });
 
@@ -164,21 +170,15 @@ export function AddHabitDialog({ open, onOpenChange }: AddHabitDialogProps) {
           <div className="space-y-2">
             <Label>Recorrência</Label>
             <RadioGroup
-              defaultValue="daily"
-              onValueChange={(value: "daily" | "weekly" | "monthly") => setValue("recurrence", value)}
+              defaultValue="day"
+              onValueChange={(value: "day" | "week" | "month") => setValue("recurrence", value)}
             >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="daily" id="rec-daily" />
-                <Label htmlFor="rec-daily">Diária</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="weekly" id="rec-weekly" />
-                <Label htmlFor="rec-weekly">Semanal</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="monthly" id="rec-monthly" />
-                <Label htmlFor="rec-monthly">Mensal</Label>
-              </div>
+              {RECURRENCE_OPTIONS.map((option) => (
+                <div key={option.value} className="flex items-center space-x-2">
+                  <RadioGroupItem value={option.value} id={`rec-${option.value}`} />
+                  <Label htmlFor={`rec-${option.value}`}>{option.label}</Label>
+                </div>
+              ))}
             </RadioGroup>
             {errors.recurrence && (
               <p className="text-sm text-destructive">{errors.recurrence.message}</p>
