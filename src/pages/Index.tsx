@@ -173,12 +173,11 @@ const Index = () => {
     }
   };
 
-  const handleCounterIncrement = async (habitId: string, color: string, target?: number) => {
+  const handleCounterIncrement = async (habitId: string, color: string, date: string, target?: number) => {
     if (!user) return;
 
-    const today = format(new Date(), "yyyy-MM-dd");
     const existingCheck = habitChecks.find(
-      (check) => check.habit_id === habitId && check.date === today
+      (check) => check.habit_id === habitId && check.date === date
     );
     const currentValue = existingCheck?.value || 0;
     const newValue = currentValue + 1;
@@ -190,17 +189,16 @@ const Index = () => {
     await upsertCheckMutation.mutateAsync({
       habit_id: habitId,
       user_id: user.id,
-      date: today,
+      date: date,
       value: newValue,
     });
   };
 
-  const handleCounterDecrement = async (habitId: string) => {
+  const handleCounterDecrement = async (habitId: string, date: string) => {
     if (!user) return;
 
-    const today = format(new Date(), "yyyy-MM-dd");
     const existingCheck = habitChecks.find(
-      (check) => check.habit_id === habitId && check.date === today
+      (check) => check.habit_id === habitId && check.date === date
     );
     const currentValue = existingCheck?.value || 0;
     const newValue = Math.max(0, currentValue - 1);
@@ -208,7 +206,7 @@ const Index = () => {
     await upsertCheckMutation.mutateAsync({
       habit_id: habitId,
       user_id: user.id,
-      date: today,
+      date: date,
       value: newValue,
     });
   };
@@ -267,7 +265,7 @@ const Index = () => {
                           className="flex h-5 w-5 items-center justify-center rounded-full border border-muted hover:bg-muted/50 p-0 text-xs leading-none"
                           onClick={(e) => {
                             e.preventDefault();
-                            handleCounterDecrement(habit.id);
+                            handleCounterDecrement(habit.id, date);
                           }}
                           disabled={getHabitCheckValue(habit.id, date) === 0}
                           style={{
@@ -286,7 +284,7 @@ const Index = () => {
                           className="flex h-5 w-5 items-center justify-center rounded-full border border-muted hover:bg-muted/50 p-0 text-xs leading-none"
                           onClick={(e) => {
                             e.preventDefault();
-                            handleCounterIncrement(habit.id, habit.color, habit.target);
+                            handleCounterIncrement(habit.id, habit.color, date, habit.target);
                           }}
                           disabled={getHabitCheckValue(habit.id, date) >= (habit.target || 1)}
                           style={{
