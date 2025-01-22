@@ -33,7 +33,7 @@ const schema = z.object({
   type: z.enum(["daily", "counter"], {
     required_error: "Tipo é obrigatório",
   }),
-  target: z.number().min(1).optional(),
+  target: z.number().min(1, "Meta deve ser maior que 0").optional(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -53,11 +53,13 @@ export function AddHabitDialog({ open, onOpenChange }: AddHabitDialogProps) {
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
       color: PRESET_COLORS[0].value,
+      type: "daily", // Definindo um valor padrão para type
     },
   });
 
@@ -117,9 +119,7 @@ export function AddHabitDialog({ open, onOpenChange }: AddHabitDialogProps) {
                   style={{ backgroundColor: color.value }}
                   onClick={() => {
                     setSelectedColor(color.value);
-                    register("color").onChange({
-                      target: { value: color.value },
-                    });
+                    setValue("color", color.value);
                   }}
                   title={color.name}
                 />
@@ -130,12 +130,8 @@ export function AddHabitDialog({ open, onOpenChange }: AddHabitDialogProps) {
           <div className="space-y-2">
             <Label>Tipo</Label>
             <RadioGroup
-              defaultValue={habitType}
-              onValueChange={(value) =>
-                register("type").onChange({
-                  target: { value },
-                })
-              }
+              value={habitType}
+              onValueChange={(value: "daily" | "counter") => setValue("type", value)}
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="daily" id="daily" />
@@ -153,12 +149,16 @@ export function AddHabitDialog({ open, onOpenChange }: AddHabitDialogProps) {
 
           {habitType === "counter" && (
             <div className="space-y-2">
-              <Label htmlFor="target">Meta</Label>
+              <Label htmlFor="target">Meta diária</Label>
               <Input
                 id="target"
                 type="number"
                 min={1}
-                {...register("target", { valueAsNumber: true })}
+                placeholder="Ex: 8 copos d'água"
+                {...register("target", { 
+                  valueAsNumber: true,
+                  required: "Meta é obrigatória para contador" 
+                })}
               />
               {errors.target && (
                 <p className="text-sm text-destructive">{errors.target.message}</p>
@@ -166,10 +166,10 @@ export function AddHabitDialog({ open, onOpenChange }: AddHabitDialogProps) {
             </div>
           )}
 
-            <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full">
             Criar
-            </Button>
-          </form>
+          </Button>
+        </form>
       </DialogContent>
     </Dialog>
   );
