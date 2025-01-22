@@ -122,47 +122,47 @@ export const Statistics = () => {
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      <div className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
-        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+      <div className="rounded-lg bg-gray-800/50 p-6 shadow-lg backdrop-blur-sm border border-gray-700">
+        <h3 className="text-sm font-medium text-gray-400">
           Taxa de Conclusão
         </h3>
-        <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
+        <p className="mt-2 text-4xl font-bold text-white">
           {stats?.completionRate.toFixed(1)}%
         </p>
       </div>
 
-      <div className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
-        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+      <div className="rounded-lg bg-gray-800/50 p-6 shadow-lg backdrop-blur-sm border border-gray-700">
+        <h3 className="text-sm font-medium text-gray-400">
           Melhor Dia
         </h3>
-        <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white capitalize">
+        <p className="mt-2 text-4xl font-bold text-white capitalize">
           {stats?.bestDay}
         </p>
       </div>
 
-      <div className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
-        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+      <div className="rounded-lg bg-gray-800/50 p-6 shadow-lg backdrop-blur-sm border border-gray-700">
+        <h3 className="text-sm font-medium text-gray-400">
           Total Completado
         </h3>
-        <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
+        <p className="mt-2 text-4xl font-bold text-white">
           {stats?.totalCompleted}
         </p>
       </div>
 
-      <div className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
-        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+      <div className="rounded-lg bg-gray-800/50 p-6 shadow-lg backdrop-blur-sm border border-gray-700">
+        <h3 className="text-sm font-medium text-gray-400">
           Sequência Atual
         </h3>
-        <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
+        <p className="mt-2 text-4xl font-bold text-white">
           {stats?.currentStreak} dias
         </p>
       </div>
 
-      <div className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
-        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+      <div className="rounded-lg bg-gray-800/50 p-6 shadow-lg backdrop-blur-sm border border-gray-700">
+        <h3 className="text-sm font-medium text-gray-400">
           Melhor Sequência
         </h3>
-        <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
+        <p className="mt-2 text-4xl font-bold text-white">
           {stats?.bestStreak} dias
         </p>
       </div>
