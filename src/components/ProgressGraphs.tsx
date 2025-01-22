@@ -81,20 +81,22 @@ export const ProgressGraphs = () => {
 
         // Criar um mapa de datas para facilitar o processamento
         const dateMap = new Map<string, { completed: number; total: number }>();
-        const weekDays = ['dom.', 'seg.', 'ter.', 'qua.', 'qui.', 'sex.', 'sáb.'];
+        const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
         // Inicializar todos os dias da semana
         for (let i = 0; i < 7; i++) {
           const date = new Date(startDate);
           date.setDate(startDate.getDate() + i);
-          const weekDay = date.toLocaleDateString('pt-BR', { weekday: 'short' });
+          const dayIndex = date.getDay();
+          const weekDay = weekDays[dayIndex];
           dateMap.set(weekDay, { completed: 0, total: totalHabits });
         }
 
         // Processar os checks
         checks?.forEach((check: HabitLog) => {
           const date = new Date(check.date);
-          const weekDay = date.toLocaleDateString('pt-BR', { weekday: 'short' });
+          const dayIndex = date.getDay();
+          const weekDay = weekDays[dayIndex];
           const dayData = dateMap.get(weekDay);
           if (dayData && check.value > 0) {
             dayData.completed += 1;
@@ -102,10 +104,10 @@ export const ProgressGraphs = () => {
         });
 
         // Converter o mapa em array
-        const result = weekDays.map(day => ({
-          date: day,
-          completed: dateMap.get(day)?.completed || 0,
-          total: totalHabits,
+        const result = Array.from(dateMap.entries()).map(([date, data]) => ({
+          date,
+          completed: data.completed,
+          total: data.total,
         }));
 
         console.log('Dados processados:', result);
