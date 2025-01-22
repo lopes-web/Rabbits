@@ -208,110 +208,122 @@ export const ProgressGraphs = () => {
   }
 
   return (
-    <div className="space-y-8">
-      {weeklyLoading || monthlyLoading ? (
-        <div className="flex h-64 items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+    <div className="space-y-6">
+      <div className="rounded-lg bg-white dark:bg-gray-800/50 p-4 shadow-lg backdrop-blur-sm border border-gray-200 dark:border-gray-700">
+        <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
+          Progresso Semanal
+        </h2>
+        <div className="h-64">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={weeklyData || []}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" className="dark:stroke-gray-700" />
+              <XAxis 
+                dataKey="date" 
+                stroke="#6B7280"
+                tick={{ fill: '#6B7280' }}
+                className="dark:stroke-gray-400 dark:fill-gray-400"
+              />
+              <YAxis 
+                domain={[0, 'auto']} 
+                stroke="#6B7280"
+                tick={{ fill: '#6B7280' }}
+                className="dark:stroke-gray-400 dark:fill-gray-400"
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'var(--tooltip-bg)',
+                  border: 'var(--tooltip-border)',
+                  borderRadius: '0.375rem',
+                  color: 'var(--tooltip-color)',
+                }}
+                wrapperStyle={{
+                  '--tooltip-bg': 'white',
+                  '--tooltip-border': '1px solid #E5E7EB',
+                  '--tooltip-color': '#111827',
+                  '.dark &': {
+                    '--tooltip-bg': '#1F2937',
+                    '--tooltip-border': '1px solid #374151',
+                    '--tooltip-color': '#F3F4F6',
+                  },
+                } as React.CSSProperties}
+              />
+              <Line
+                type="monotone"
+                dataKey="completed"
+                stroke="#8B5CF6"
+                name="Hábitos Completados"
+                strokeWidth={2}
+                dot={{ fill: '#8B5CF6', strokeWidth: 0 }}
+                activeDot={{ r: 6, fill: '#8B5CF6' }}
+              />
+              <Line
+                type="monotone"
+                dataKey="total"
+                stroke="#10B981"
+                name="Total de Hábitos"
+                strokeWidth={2}
+                dot={{ fill: '#10B981', strokeWidth: 0 }}
+                activeDot={{ r: 6, fill: '#10B981' }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
-      ) : weeklyError || monthlyError ? (
-        <div className="rounded-lg bg-red-900/50 p-4 text-red-200">
-          <p>Erro ao carregar dados dos gráficos.</p>
-        </div>
-      ) : (
-        <>
-          <div className="rounded-lg bg-gray-800/50 p-4 shadow-lg backdrop-blur-sm border border-gray-700">
-            <h2 className="mb-4 text-xl font-semibold text-white">
-              Progresso Semanal
-            </h2>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={weeklyData || []}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                  <XAxis 
-                    dataKey="date" 
-                    stroke="#9CA3AF"
-                    tick={{ fill: '#9CA3AF' }}
-                  />
-                  <YAxis 
-                    domain={[0, 'auto']} 
-                    stroke="#9CA3AF"
-                    tick={{ fill: '#9CA3AF' }}
-                  />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: '#1F2937',
-                      border: '1px solid #374151',
-                      borderRadius: '0.375rem',
-                      color: '#F3F4F6'
-                    }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="completed"
-                    stroke="#8B5CF6"
-                    name="Hábitos Completados"
-                    strokeWidth={2}
-                    dot={{ fill: '#8B5CF6', strokeWidth: 0 }}
-                    activeDot={{ r: 6, fill: '#8B5CF6' }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="total"
-                    stroke="#10B981"
-                    name="Total de Hábitos"
-                    strokeWidth={2}
-                    dot={{ fill: '#10B981', strokeWidth: 0 }}
-                    activeDot={{ r: 6, fill: '#10B981' }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
+      </div>
 
-          <div className="rounded-lg bg-gray-800/50 p-4 shadow-lg backdrop-blur-sm border border-gray-700">
-            <h2 className="mb-4 text-xl font-semibold text-white">
-              Progresso Mensal
-            </h2>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyData || []}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                  <XAxis 
-                    dataKey="date" 
-                    stroke="#9CA3AF"
-                    tick={{ fill: '#9CA3AF' }}
-                  />
-                  <YAxis 
-                    domain={[0, 'auto']} 
-                    stroke="#9CA3AF"
-                    tick={{ fill: '#9CA3AF' }}
-                  />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: '#1F2937',
-                      border: '1px solid #374151',
-                      borderRadius: '0.375rem',
-                      color: '#F3F4F6'
-                    }}
-                  />
-                  <Bar 
-                    dataKey="completed" 
-                    fill="#8B5CF6" 
-                    name="Hábitos Completados"
-                    radius={[4, 4, 0, 0]}
-                  />
-                  <Bar 
-                    dataKey="total" 
-                    fill="#10B981" 
-                    name="Total de Hábitos"
-                    radius={[4, 4, 0, 0]}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </>
-      )}
+      <div className="rounded-lg bg-white dark:bg-gray-800/50 p-4 shadow-lg backdrop-blur-sm border border-gray-200 dark:border-gray-700">
+        <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
+          Progresso Mensal
+        </h2>
+        <div className="h-64">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={monthlyData || []}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" className="dark:stroke-gray-700" />
+              <XAxis 
+                dataKey="date" 
+                stroke="#6B7280"
+                tick={{ fill: '#6B7280' }}
+                className="dark:stroke-gray-400 dark:fill-gray-400"
+              />
+              <YAxis 
+                domain={[0, 'auto']} 
+                stroke="#6B7280"
+                tick={{ fill: '#6B7280' }}
+                className="dark:stroke-gray-400 dark:fill-gray-400"
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'var(--tooltip-bg)',
+                  border: 'var(--tooltip-border)',
+                  borderRadius: '0.375rem',
+                  color: 'var(--tooltip-color)',
+                }}
+                wrapperStyle={{
+                  '--tooltip-bg': 'white',
+                  '--tooltip-border': '1px solid #E5E7EB',
+                  '--tooltip-color': '#111827',
+                  '.dark &': {
+                    '--tooltip-bg': '#1F2937',
+                    '--tooltip-border': '1px solid #374151',
+                    '--tooltip-color': '#F3F4F6',
+                  },
+                } as React.CSSProperties}
+              />
+              <Bar 
+                dataKey="completed" 
+                fill="#8B5CF6" 
+                name="Hábitos Completados"
+                radius={[4, 4, 0, 0]}
+              />
+              <Bar 
+                dataKey="total" 
+                fill="#10B981" 
+                name="Total de Hábitos"
+                radius={[4, 4, 0, 0]}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
     </div>
   );
 }; 
