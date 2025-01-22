@@ -4,6 +4,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { Toaster } from "sonner";
 import Index from "@/pages/Index";
 import Login from "@/pages/Login";
+import { Analytics } from "@/pages/Analytics";
 import { PrivateRoute } from "@/components/PrivateRoute";
 
 const queryClient = new QueryClient({
@@ -27,6 +28,14 @@ export default function App() {
               element={
                 <PrivateRoute>
                   <Index />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/analytics"
+              element={
+                <PrivateRoute>
+                  <Analytics />
                 </PrivateRoute>
               }
             />

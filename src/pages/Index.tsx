@@ -20,12 +20,14 @@ import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { format, startOfYear, endOfYear } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedHabit, setSelectedHabit] = useState<string | null>(null);
   const { user, signOut } = useAuth();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   // Queries
   const { data: habits = [] } = useQuery({
@@ -219,9 +221,18 @@ const Index = () => {
     <div className="container mx-auto p-4 space-y-6">
       <div className="flex justify-between items-center">
         <Logo />
-        <Button onClick={() => setIsDialogOpen(true)} size="sm">
-          Adicionar Hábito
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={() => navigate('/analytics')}
+            size="sm"
+          >
+            Análise
           </Button>
+          <Button onClick={() => setIsDialogOpen(true)} size="sm">
+            Adicionar Hábito
+          </Button>
+        </div>
       </div>
         <div className="space-y-4">
           {habits.map((habit) => (
